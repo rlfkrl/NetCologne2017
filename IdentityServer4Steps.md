@@ -1,7 +1,9 @@
 ### Projekt anlegen ###
 * leeres ASP.NET Core Projekt anlegen
-* Nuget-Package "IdentityServer4" hinzufügen
-
+* Nuget-Packages
+	* "IdentityServer4" 
+	* Microsoft.Extensions.Logging.Debug
+	* "Serilog.Extensions.Logging.File
 ### IdentityServer einbinden ###
 
 <pre>
@@ -16,6 +18,8 @@
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
     {
         loggerFactory.AddConsole(LogLevel.Debug);
+		loggerFactory.AddDebug();
+
         app.UseDeveloperExceptionPage();
 
         app.UseIdentityServer();

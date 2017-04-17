@@ -17,6 +17,15 @@ namespace IdentityServer
                 };
         }
 
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+                            {
+                                new IdentityResources.OpenId(),
+                                new IdentityResources.Profile(),
+                            };
+        }
+
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>
@@ -26,16 +35,21 @@ namespace IdentityServer
                                 ClientId = "client",
 
                                 // no interactive user, use the clientid/secret for authentication
-                                AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                                // secret for authentication
-                                ClientSecrets =
-                                {
-                                    new Secret("secret".Sha256())
-                                },
+                                AllowedGrantTypes = GrantTypes.Implicit,
 
                                 // scopes that client has access to
-                                AllowedScopes = { "api1" }
+                                AllowedScopes = {
+                                    IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
+                                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile
+                                },
+
+                                RedirectUris =
+                                {
+                                    "http://localhost/dncAspNet/signin-oidc",
+                                    "http://localhost/dncAspNetCore/signin-oidc",
+                                    Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAsp/signin-oidc"),
+                                    Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAspCore/signin-oidc"),
+                                }
                             }
                         };
         }

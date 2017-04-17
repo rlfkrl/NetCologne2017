@@ -20,9 +20,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deployment", "_deployment"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Steps", "Steps", "{C44FACC9-63C3-4279-B13E-FE3AC76F5734}"
 	ProjectSection(SolutionItems) = preProject
+		AspNetCoreWebSite.md = AspNetCoreWebSite.md
 		AspNetWebSite.md = AspNetWebSite.md
 		..\IdentityServer4Steps.md = ..\IdentityServer4Steps.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreWebSite", "AspNetCoreWebSite\AspNetCoreWebSite.csproj", "{34E7FBFC-4604-4538-8A3B-127236EFA286}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{6B595E3F-F19A-40A9-BC7B-0CD757FBC137}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B595E3F-F19A-40A9-BC7B-0CD757FBC137}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B595E3F-F19A-40A9-BC7B-0CD757FBC137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E7FBFC-4604-4538-8A3B-127236EFA286}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E7FBFC-4604-4538-8A3B-127236EFA286}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E7FBFC-4604-4538-8A3B-127236EFA286}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E7FBFC-4604-4538-8A3B-127236EFA286}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
