@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AspNetCoreWebSite
 {
@@ -67,7 +68,8 @@ namespace AspNetCoreWebSite
                         Scope = { "openid", "profile" },
                         ResponseType = "id_token",
                         Authority = "http://localhost/dncids",
-                        RequireHttpsMetadata = false
+                        RequireHttpsMetadata = false,
+                        TokenValidationParameters = new TokenValidationParameters() { NameClaimType = "name" }
                     });
 
             app.UseMvc(routes =>
