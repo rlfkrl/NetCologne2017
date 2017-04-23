@@ -63,13 +63,21 @@ namespace AspNetCoreWebSite
                     new OpenIdConnectOptions {
                         AuthenticationScheme = "oidc",
                         SignInScheme = "Cookies",
-                        ClientId = "client",
-                        ClientSecret = "secret",
-                        Scope = { "openid", "profile" },
-                        ResponseType = "id_token",
+
                         Authority = "http://localhost/dncids",
                         RequireHttpsMetadata = false,
-                        TokenValidationParameters = new TokenValidationParameters() { NameClaimType = "name" }
+
+                        ClientId = "client",
+                        ClientSecret = "secret",
+                        
+                        ResponseType = "code id_token",
+                        Scope = { "openid", "profile", "offline_access", "dnc2017" },
+
+                        GetClaimsFromUserInfoEndpoint = true,
+                        SaveTokens = true,
+
+                        TokenValidationParameters = new TokenValidationParameters() { NameClaimType = "name" },
+
                     });
 
             app.UseMvc(routes =>

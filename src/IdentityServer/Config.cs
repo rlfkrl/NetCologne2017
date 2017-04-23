@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityModel;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace IdentityServer
         {
             return new List<ApiResource>
                 {
-                    new ApiResource("api", "My API")
+                    new ApiResource("dnc2017", "DNC2017 API", new [] { JwtClaimTypes.Name } )
                 };
         }
 
@@ -34,13 +35,14 @@ namespace IdentityServer
                             {
                                 ClientId = "client",
 
-                                // no interactive user, use the clientid/secret for authentication
-                                AllowedGrantTypes = GrantTypes.Implicit,
+                                AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                                ClientSecrets = new [] { new Secret("secret".Sha256()) },
 
                                 // scopes that client has access to
                                 AllowedScopes = {
                                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
-                                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile
+                                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
+                                    "dnc2017"
                                 },
 
                                 RedirectUris =
@@ -49,7 +51,11 @@ namespace IdentityServer
                                     "http://localhost/dncAspNetCore/signin-oidc",
                                     Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAsp/signin-oidc"),
                                     Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAspCore/signin-oidc"),
-                                }
+                                },
+                                RequireConsent = false,
+                                AllowOfflineAccess = true,
+                                AllowAccessTokensViaBrowser = true,
+                                AlwaysIncludeUserClaimsInIdToken = true
                             }
                         };
         }
