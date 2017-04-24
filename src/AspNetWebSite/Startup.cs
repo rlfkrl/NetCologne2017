@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,21 +31,24 @@ namespace AspNetWebSite
 
             app.UseCookieAuthentication(
                 new CookieAuthenticationOptions {
-
+                    ExpireTimeSpan = TimeSpan.FromMinutes(60)
                 });
+
 
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
                 {
-                    // AuthenticationScheme = "oidc",
-                    // SignInScheme = "Cookies",
                     ClientId = "client",
                     ClientSecret = "secret",
-                    Scope = "openid profile",
-                    ResponseType = "id_token",
                     Authority = "http://localhost/dncids",
-                    RedirectUri = "http://localhost/dncAspNet/signin-oidc"
-                    // RequireHttpsMetadata = false,
+                    RedirectUri = "http://localhost/dncAspNet/signin-oidc",
+
+                    Scope = "openid profile",
+                    ResponseType = "code id_token",
+                    
+                    TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" }
+                    
+                    
                 });
 
             AreaRegistration.RegisterAllAreas();
