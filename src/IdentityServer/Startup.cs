@@ -43,10 +43,7 @@ namespace IdentityServer
             loggerFactory.AddDebug();
             loggerFactory.AddFile("Logs/identityServer-{Date}.log");
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
 
