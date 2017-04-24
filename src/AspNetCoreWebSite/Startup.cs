@@ -64,7 +64,7 @@ namespace AspNetCoreWebSite
                         ClientSecret = "secret",
                         
                         ResponseType = "code id_token",
-                        Scope = { "openid", "profile", "offline_access", "dnc2017" },
+                        Scope = { "openid", "profile" },
 
                         GetClaimsFromUserInfoEndpoint = true,
                         SaveTokens = true,
