@@ -12,7 +12,13 @@
 * Startup.cs
 	* in CookieAuthenticationOptions: 
 		* `CookieManager = new ChunkingCookieManager()`
-		`
-
-		`
+		```C#
+		TicketDataFormat = new AspNetTicketDataFormat( 
+			new DataProtectorShim(
+				DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
+					.CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
+							"Cookies", 
+							"v2"))
+			),
+		```
 	
