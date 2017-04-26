@@ -3,15 +3,15 @@ using Microsoft.Owin.Diagnostics;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
+using Microsoft.Owin.Security.Interop;
 using Owin;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Web;
+using System.IO;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.AspNetCore.DataProtection;
 
 [assembly: OwinStartup("Startup", typeof(AspNetWebSite.Startup))]
 
@@ -31,7 +31,17 @@ namespace AspNetWebSite
 
             app.UseCookieAuthentication(
                 new CookieAuthenticationOptions {
-                    ExpireTimeSpan = TimeSpan.FromMinutes(60)
+                    ExpireTimeSpan = TimeSpan.FromMinutes(60),
+
+                    // @Note: add this to share dataprotection keys
+                    TicketDataFormat = new AspNetTicketDataFormat(  
+                                            new DataProtectorShim(
+                                                    DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
+                                                            .CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
+                                                                             "Cookies", 
+                                                                             "v2"))),
+                    // @Note: add Microsoft.Owin.Security.Interop.ChunkingCookieManager because ASP.NET Core uses this new Manager
+                    CookieManager = new ChunkingCookieManager()
                 });
 
 

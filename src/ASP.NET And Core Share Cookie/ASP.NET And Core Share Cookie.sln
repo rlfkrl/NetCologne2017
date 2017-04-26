@@ -16,6 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deployment", "_deployment"
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Steps", "Steps", "{C44FACC9-63C3-4279-B13E-FE3AC76F5734}"
+	ProjectSection(SolutionItems) = preProject
+		steps.md = steps.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebSite", "AspNetCoreWebSite\AspNetCoreWebSite.csproj", "{34E7FBFC-4604-4538-8A3B-127236EFA286}"
 EndProject

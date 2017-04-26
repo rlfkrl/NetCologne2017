@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace AspNetCoreWebSite
 {
@@ -47,7 +49,10 @@ namespace AspNetCoreWebSite
             app.UseCookieAuthentication( new CookieAuthenticationOptions {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromMinutes( 60 )
+                ExpireTimeSpan = TimeSpan.FromMinutes( 60 ),
+
+                // @Note: share dataprotection keys
+                DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
