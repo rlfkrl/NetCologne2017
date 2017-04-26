@@ -4,6 +4,7 @@ using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IdentityServer
@@ -42,6 +43,7 @@ namespace IdentityServer
                                 AllowedScopes = {
                                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
+                                    IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess,
                                     "dnc2017"
                                 },
 
@@ -68,13 +70,22 @@ namespace IdentityServer
                             {
                                 SubjectId = "1",
                                 Username = "alice",
-                                Password = "password"
+                                Password = "password",
+                                Claims = new List<Claim>
+                                {
+                                    new Claim( "name", "Alice" )
+                                }
+                                
                             },
                             new TestUser
                             {
                                 SubjectId = "2",
                                 Username = "bob",
-                                Password = "password"
+                                Password = "password",
+                                Claims = new List<Claim>
+                                {
+                                    new Claim( "name", "Bob" )
+                                }
                             }
                         };
         }

@@ -1,6 +1,8 @@
 #Requires -RunAsAdministrator
 Import-Module WebAdministration
 
+Set-StrictMode -Version 'Latest'
+
 $idsAppPoolName = "DNCIdentityServerAppPool"
 $aspNetAppPoolName = "DNCAspNetWebSiteAppPool"
 $aspNetCoreAppPoolName = "DNCAspNetCoreWebSiteAppPool"
@@ -20,6 +22,7 @@ if (!(Test-Path $idsAppPoolName  -pathType container))
 {
     $appPool = New-Item $idsAppPoolName 
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value ""
+	$appPool.ProcessModel.IdentityType = 'LocalSystem'
 }
 
 if (!(Test-Path $aspNetAppPoolName -pathType container))
