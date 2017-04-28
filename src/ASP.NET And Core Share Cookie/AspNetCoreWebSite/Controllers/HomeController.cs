@@ -15,6 +15,11 @@ namespace AspNetCoreWebSite.Controllers
             return View();
         }
 
+        public IActionResult Combined()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
