@@ -50,7 +50,7 @@ namespace AspNetCoreWebSite
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
                 ExpireTimeSpan = TimeSpan.FromMinutes( 60 ),
-
+                CookiePath = "/",
                 // @Note: share dataprotection keys
                 DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
             });
