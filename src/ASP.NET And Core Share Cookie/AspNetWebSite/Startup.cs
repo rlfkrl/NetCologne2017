@@ -29,10 +29,20 @@ namespace AspNetWebSite
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
+            /* used for debugging 
+            app.Use(async (Context, next) =>
+            {
+                await next.Invoke();
+            });
+            */
+
             app.UseCookieAuthentication(
                 new CookieAuthenticationOptions {
+                    AuthenticationType = "Cookie",
                     ExpireTimeSpan = TimeSpan.FromMinutes(60),
-
+                    CookieName = ".AspNetCore.Cookies",
+                    CookiePath = "/",
+                    CookieSecure = CookieSecureOption.SameAsRequest,
                     // @Note: add this to share dataprotection keys
                     TicketDataFormat = new AspNetTicketDataFormat(  
                                             new DataProtectorShim(
@@ -45,6 +55,7 @@ namespace AspNetWebSite
                 });
 
 
+            /*
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
                 {
@@ -60,6 +71,7 @@ namespace AspNetWebSite
                     
                     
                 });
+            */
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
