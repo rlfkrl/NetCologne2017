@@ -2,11 +2,9 @@
 using Microsoft.Owin.Diagnostics;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
 using Microsoft.Owin.Security.Interop;
 using Owin;
 using System;
-using System.IdentityModel.Tokens;
 using System.IO;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -55,7 +53,7 @@ namespace AspNetWebSite
                 });
 
 
-            /*
+            /* no OpenID Connect Auth required -> only use cookieauth
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
                 {
@@ -68,8 +66,6 @@ namespace AspNetWebSite
                     ResponseType = "code id_token",
                     
                     TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" }
-                    
-                    
                 });
             */
 
