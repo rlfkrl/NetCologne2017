@@ -3,6 +3,10 @@ Import-Module WebAdministration
 
 Set-StrictMode -Version 'Latest'
 
+
+cd Cert:\LocalMachine\My
+$computerName = [System.Environment]::MachineName
+
 $idsAppPoolName = "DNCIdentityServerAppPool"
 $aspNetAppPoolName = "DNCAspNetWebSiteAppPool"
 $aspNetCoreAppPoolName = "DNCAspNetCoreWebSiteAppPool"
@@ -11,10 +15,11 @@ $idsAppName = "DNCIds"
 $aspNetAppName = "DNCAspNet"
 $aspNetCoreAppName = "DNCAspNetCore"
 
-$webSite = "Default Web Site"
+$webSite = "DNC2017"
 $directoryPath = "C:\inetpub\dnc2017"
 
 #navigate to the app pools root
+Push-Location
 cd IIS:\AppPools\
 
 
@@ -38,6 +43,23 @@ if (!(Test-Path $aspNetCoreAppPoolName -pathType container))
     $appPool = New-Item $aspNetCoreAppPoolName
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value ""
 }
+
+Pop-Location
+
+# create webSite
+cd IIS:\Sites
+
+if ( -not (Test-Path $webSite -PathType Container ) )
+{
+    New-Item $webSite -bindings @{protocol="https";bindingInformation=":443:" + $webSite} -physicalPath $directoryPath
+}
+Pop-Location
+
+cd IIS:\SslBindings
+$binding = Get-WebBinding $webSite
+$cert = New-SelfSignedCertificate -DnsName "localhost" -CertStoreLocation Cert:\LocalMachine\My  
+$cert | NetItem 0.0.0.0!443
+Pop-Location
 
 #navigate to the sites root
 cd IIS:\Sites\$webSite
@@ -87,3 +109,8 @@ else
 
  $project = join-path $solutionDir "IdentityServer\IdentityServer.csproj"
  & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+
+
+ # new-selfsignedcertificate -DnsName localhost -CertStoreLocation Cert:\LocalMachine\My
+ # copy the new created certificate to "vertauenswürdige"...
+ # bind cert to binding
