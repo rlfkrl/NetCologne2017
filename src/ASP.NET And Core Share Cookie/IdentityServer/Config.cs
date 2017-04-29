@@ -51,8 +51,12 @@ namespace IdentityServer
                                 {
                                     "http://localhost/dncAspNet/signin-oidc",
                                     "http://localhost/dncAspNetCore/signin-oidc",
+                                    "https://localhost/dncAspNet/signin-oidc",
+                                    "https://localhost/dncAspNetCore/signin-oidc",
                                     Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAsp/signin-oidc"),
                                     Environment.ExpandEnvironmentVariables("http://%COMPUTERNAME%/dncNetAspCore/signin-oidc"),
+                                    Environment.ExpandEnvironmentVariables("https://%COMPUTERNAME%/dncNetAsp/signin-oidc"),
+                                    Environment.ExpandEnvironmentVariables("https://%COMPUTERNAME%/dncNetAspCore/signin-oidc"),
                                 },
                                 RequireConsent = false,
                                 AllowOfflineAccess = true,
