@@ -17,3 +17,8 @@
 * [Microsoft Docs: Sharing authentication cookies between ASP.NET 4.x and ASP.NET Core applications](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/compatibility/cookie-sharing)
 * [SCOTT HANSELMAN: Sharing Authorization Cookies between ASP.NET 4.x and ASP.NET Core 1.0](https://www.hanselman.com/blog/SharingAuthorizationCookiesBetweenASPNET4xAndASPNETCore10.aspx)
 * http://www.dotnetexpertguide.com/2016/11/sharing-owin-authentication-cookie-across-iis-applications.html
+https://github.com/blowdart/idunno.CookieSharing
+
+
+## create a selfsigned certificate
+http://www.virtues.it/2015/09/howto-create-self-signed-certificates-posh40/
