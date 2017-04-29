@@ -37,6 +37,7 @@ namespace AspNetCoreWebSite
 
         public const string DncAspNetUrl = "https://localhost/dncaspnet";
         public const string DncIdsUrl = "https://localhost/dncids";
+        public const string DncAspNetCoreUrl = "https://localhost/dncaspnetcore";
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -78,6 +79,7 @@ namespace AspNetCoreWebSite
 
                         GetClaimsFromUserInfoEndpoint = true,
                         SaveTokens = true,
+                        PostLogoutRedirectUri = DncAspNetCoreUrl,
 
                         TokenValidationParameters = new TokenValidationParameters() { NameClaimType = "name" },
 

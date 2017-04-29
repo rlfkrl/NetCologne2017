@@ -21,7 +21,7 @@
 <body>
     <div class="container body-content">
         <h1>ASP.NET Core WebSite</h1>
-        <p>you are logged in as: @(User.Identity.Name)</p>
+        <p>you are logged in as: @(User.Identity.Name) -- @Html.ActionLink("Logout", "Logout", "Home")</p>
 
         @RenderBody()
     </div>
