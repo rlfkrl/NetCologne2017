@@ -38,9 +38,9 @@ namespace AspNetWebSite
                 new CookieAuthenticationOptions {
                     AuthenticationType = "Cookie",
                     ExpireTimeSpan = TimeSpan.FromMinutes(60),
-                    CookieName = ".AspNetCore.Cookies",
+                    CookieName = "DNC2017_SharedAuthCookie",
                     CookiePath = "/",
-                    CookieSecure = CookieSecureOption.SameAsRequest,
+                    CookieSecure = CookieSecureOption.Always,
                     // @Note: add this to share dataprotection keys
                     TicketDataFormat = new AspNetTicketDataFormat(  
                                             new DataProtectorShim(

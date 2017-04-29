@@ -35,6 +35,9 @@ namespace AspNetCoreWebSite
             services.AddMvc();
         }
 
+        public const string DncAspNetUrl = "https://localhost/dncaspnet";
+        public const string DncIdsUrl = "https://localhost/dncids";
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -50,7 +53,9 @@ namespace AspNetCoreWebSite
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
                 ExpireTimeSpan = TimeSpan.FromMinutes( 60 ),
+                CookieName = "DNC2017_SharedAuthCookie",
                 CookiePath = "/",
+                CookieSecure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always,
                 // @Note: share dataprotection keys
                 DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
             });
@@ -62,7 +67,7 @@ namespace AspNetCoreWebSite
                         AuthenticationScheme = "oidc",
                         SignInScheme = "Cookies",
 
-                        Authority = "http://localhost/dncids",
+                        Authority = DncIdsUrl,
                         RequireHttpsMetadata = false,
 
                         ClientId = "client",
