@@ -54,10 +54,10 @@ namespace AspNetCoreWebSite
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
                 ExpireTimeSpan = TimeSpan.FromMinutes( 60 ),
-                CookieName = "DNC2017_SharedAuthCookie",
-                CookiePath = "/",
-                CookieSecure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always,
-                // @Note: share dataprotection keys
+                CookieName = "DNC2017_SharedAuthCookie",                                // the shared cookie name 
+                CookiePath = "/",                                                       // force cookie to be send to both
+                CookieSecure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always,     // enforce encryption
+                                                                                        // share dataprotection keys
                 DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
             });
 

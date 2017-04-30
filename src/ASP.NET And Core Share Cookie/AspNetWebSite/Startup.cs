@@ -34,23 +34,21 @@ namespace AspNetWebSite
             });
             */
 
-            app.UseCookieAuthentication(
-                new CookieAuthenticationOptions {
-                    AuthenticationType = "Cookie",
+            var provider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"));
+            var dataProtector =  provider.CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
+                                        "Cookies", "v2");
+
+            app.UseCookieAuthentication( new CookieAuthenticationOptions {
+                    AuthenticationType = "Cookie",                  
                     ExpireTimeSpan = TimeSpan.FromMinutes(60),
-                    CookieName = "DNC2017_SharedAuthCookie",
-                    CookiePath = "/",
-                    CookieSecure = CookieSecureOption.Always,
-                    // @Note: add this to share dataprotection keys
-                    TicketDataFormat = new AspNetTicketDataFormat(  
-                                            new DataProtectorShim(
-                                                    DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
-                                                            .CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
-                                                                             "Cookies", 
-                                                                             "v2"))),
-                    // @Note: add Microsoft.Owin.Security.Interop.ChunkingCookieManager because ASP.NET Core uses this new Manager
-                    CookieManager = new ChunkingCookieManager()
-                });
+                    CookieName = "DNC2017_SharedAuthCookie",            // the shared cookie name 
+                    CookiePath = "/",                                   // force cookie to be send to both
+                    CookieSecure = CookieSecureOption.Always,           // enforce encryption
+                                                                        // share dataprotection keys
+                    TicketDataFormat = new AspNetTicketDataFormat(new DataProtectorShim( dataProtector)),
+                    CookieManager = new ChunkingCookieManager()         // add Microsoft.Owin.Security.Interop.ChunkingCookieManager 
+                                                                        // since ASP.NET Core uses this new Manager
+            });
 
 
             /* no OpenID Connect Auth required -> only use cookieauth
