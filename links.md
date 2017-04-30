@@ -19,7 +19,7 @@
 * [The OWIN OpenID Connect Middleware](https://www.microsoftpressstore.com/articles/article.aspx?p=2473126)
 
 ### ASP.NET Core
-* [An introduction to OpenID Connect in ASP.NET Core] (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core/)
+* [An introduction to OpenID Connect in ASP.NET Core](https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core/)
 
 ### IdentityServer 4
 * [Docs](http://docs.identityserver.io/en/release/)
