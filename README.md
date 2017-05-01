@@ -1,6 +1,6 @@
-# dotnet Cologne 2017 - OpenID Connect Cookiesharing zwischen ASP.NET und ASP.NET Core
+# dotnet Cologne 2017 - Authentication Cookie Sharing zwischen ASP.NET und ASP.NET Core
 
-Vortagsmaterial zum Vortrag ["OpenID Connect Cookiesharing zwischen ASP.NET und ASP.NET Core" auf der DotNetCologne 2017](https://dotnet-cologne.de/Vortraege.ashx#openid_connect)
+Vortagsmaterial zum Vortrag ["Authentication Cookie Sharing zwischen ASP.NET und ASP.NET Core" auf der DotNetCologne 2017](https://dotnet-cologne.de/Vortraege.ashx#openid_connect)
  
 > Gelegentlich ist es nötig, das Authentifizierungscookie zwischen einer ASP.NET und einer ASP.NET Core Anwendung zu teilen. Ralf Karle gibt eine kurze Anleitung, wie man das bewerkstelligt.
 
