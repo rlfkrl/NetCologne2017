@@ -15,11 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deployment", "_deployment"
 		Uninstall.ps1 = Uninstall.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Steps", "Steps", "{C44FACC9-63C3-4279-B13E-FE3AC76F5734}"
-	ProjectSection(SolutionItems) = preProject
-		steps.md = steps.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebSite", "AspNetCoreWebSite\AspNetCoreWebSite.csproj", "{34E7FBFC-4604-4538-8A3B-127236EFA286}"
 EndProject
 Global
@@ -46,6 +41,5 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{78356063-C747-43D5-BCBD-06E061E9B393} = {3CC7D1C0-28B4-45BF-9A08-3896D45DC29E}
-		{C44FACC9-63C3-4279-B13E-FE3AC76F5734} = {3CC7D1C0-28B4-45BF-9A08-3896D45DC29E}
 	EndGlobalSection
 EndGlobal

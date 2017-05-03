@@ -25,14 +25,14 @@ namespace AspNetWebSite
                 ShowHeaders = true
             } );
 
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-
             /* used for debugging 
             app.Use(async (Context, next) =>
             {
                 await next.Invoke();
             });
             */
+
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             var provider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"));
             var dataProtector =  provider.CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
@@ -49,23 +49,6 @@ namespace AspNetWebSite
                     CookieManager = new ChunkingCookieManager()         // add Microsoft.Owin.Security.Interop.ChunkingCookieManager 
                                                                         // since ASP.NET Core uses this new Manager
             });
-
-
-            /* no OpenID Connect Auth required -> only use cookieauth
-            app.UseOpenIdConnectAuthentication(
-                new OpenIdConnectAuthenticationOptions
-                {
-                    ClientId = "client",
-                    ClientSecret = "secret",
-                    Authority = "http://localhost/dncids",
-                    RedirectUri = "http://localhost/dncAspNet/signin-oidc",
-
-                    Scope = "openid profile",
-                    ResponseType = "code id_token",
-                    
-                    TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" }
-                });
-            */
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

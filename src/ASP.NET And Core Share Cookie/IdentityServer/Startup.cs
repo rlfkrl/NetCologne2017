@@ -20,13 +20,7 @@ namespace IdentityServer
         {
             services.AddMvc();
 
-            services.AddIdentityServer((options) =>
-                                                    {
-                                                        options.Events.RaiseErrorEvents = true;
-                                                        options.Events.RaiseFailureEvents = true;
-                                                        options.Events.RaiseSuccessEvents = true;
-                                                        options.Events.RaiseInformationEvents = true;
-                                                    } ).
+            services.AddIdentityServer().
                      AddTemporarySigningCredential().
                      AddInMemoryPersistedGrants().
                      AddInMemoryIdentityResources(Config.GetIdentityResources()).
