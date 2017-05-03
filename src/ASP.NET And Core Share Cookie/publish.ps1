@@ -27,7 +27,7 @@ if (!(Test-Path $idsAppPoolName  -pathType container))
 {
     $appPool = New-Item $idsAppPoolName 
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value ""
-	$appPool.ProcessModel.IdentityType = 'LocalSystem'
+    Set-ItemProperty IIS:\AppPools\$idsAppPoolName -name processModel.identityType -value 1
 }
 
 if (!(Test-Path $aspNetAppPoolName -pathType container))
