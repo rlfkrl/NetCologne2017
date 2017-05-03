@@ -51,7 +51,7 @@ cd IIS:\Sites
 
 if ( -not (Test-Path $webSite -PathType Container ) )
 {
-    New-Item $webSite -bindings @{protocol="https";bindingInformation=":443:" + $webSite} -physicalPath $directoryPath
+    New-Item $webSite -bindings @{protocol="https";bindingInformation=":443:" } -physicalPath $directoryPath
 }
 Pop-Location
 
