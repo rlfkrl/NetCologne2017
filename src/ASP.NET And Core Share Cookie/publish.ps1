@@ -55,12 +55,6 @@ if ( -not (Test-Path $webSite -PathType Container ) )
 }
 Pop-Location
 
-cd IIS:\SslBindings
-$binding = Get-WebBinding $webSite
-$cert = New-SelfSignedCertificate -DnsName "localhost" -CertStoreLocation Cert:\LocalMachine\My  
-$cert | NetItem 0.0.0.0!443
-Pop-Location
-
 #navigate to the sites root
 cd IIS:\Sites\$webSite
 
@@ -98,19 +92,49 @@ else
 }
 
 # publish the project
- $msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\msbuild.exe"
- $solutionDir = $PSScriptRoot
+$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\msbuild.exe"
+$solutionDir = $PSScriptRoot
 
- $project = join-path $solutionDir "AspNetCoreWebSite\AspNetCoreWebSite.csproj"
- & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+$project = join-path $solutionDir "AspNetCoreWebSite\AspNetCoreWebSite.csproj"
+& $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
- $project = join-path $solutionDir "AspNetWebSite\AspNetWebSite.csproj"
- & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+$project = join-path $solutionDir "AspNetWebSite\AspNetWebSite.csproj"
+& $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
- $project = join-path $solutionDir "IdentityServer\IdentityServer.csproj"
- & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+$project = join-path $solutionDir "IdentityServer\IdentityServer.csproj"
+& $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
+# create the certificates
+$SourceStoreScope = 'LocalMachine'
+$SourceStorename = 'My'
+$friendlyName = "DNC2017 localhost testcertificate"
 
- # new-selfsignedcertificate -DnsName localhost -CertStoreLocation Cert:\LocalMachine\My
- # copy the new created certificate to "vertauenswürdige"...
- # bind cert to binding
+$SourceStore = New-Object  -TypeName System.Security.Cryptography.X509Certificates.X509Store  -ArgumentList $SourceStorename, $SourceStoreScope
+$SourceStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadOnly)
+
+$cert = $SourceStore.Certificates | Where-Object { $_.FriendlyName -like $friendlyName }
+
+if ( -not $cert)
+{
+    $cert = new-selfsignedcertificate -DnsName localhost -CertStoreLocation Cert:\LocalMachine\My -FriendlyName "$friendlyName"
+}
+
+$DestStoreScope = 'LocalMachine'
+$DestStoreName = 'Root'
+
+$DestStore = New-Object  -TypeName System.Security.Cryptography.X509Certificates.X509Store  -ArgumentList $DestStoreName, $DestStoreScope
+$DestStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+$destCert = $DestStore.Certificates | Where-Object { $_.FriendlyName -like $friendlyName }
+if ( -not $destCert )
+{
+    $DestStore.Add($cert)
+}
+
+$SourceStore.Close()
+$DestStore.Close()
+
+cd IIS:\SslBindings
+$binding = Get-WebBinding $webSite
+$binding.AddSslCertificate( $cert.GetCertHashString(), "my")
+Pop-Location
+
