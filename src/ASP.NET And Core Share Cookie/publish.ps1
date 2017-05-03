@@ -1,4 +1,22 @@
 #Requires -RunAsAdministrator
+
+<#
+.SYNOPSIS
+    installs the dotnet cologne sample app on local IIS
+.DESCRIPTION
+	creates a web site: DNC2017 
+    creates applications pool : ( DNCIdentityServerAppPool, DNCAspNetWebSiteAppPool, DNCAspNetCoreWebSiteAppPool )
+	creates web application in website DNC2017: (DNCIds, DNCAspNet, DNCAspNetCore)
+	creates a certificate with friendly name : DNC2017 localhost testcertificate
+	installs this certificate in /localmachine/my and localmachine/root 
+	configures https binding for localhost on website 2017
+	deploys all projects to "C:\inetpub\dnc2017"
+    
+.NOTES
+    requires IIS installed
+    Author         : Ralf Karle
+#>
+
 Import-Module WebAdministration
 
 Set-StrictMode -Version 'Latest'
@@ -25,6 +43,7 @@ cd IIS:\AppPools\
 
 if (!(Test-Path $idsAppPoolName  -pathType container))
 {
+	Write-Host "Creating app pool $idsAppPoolName"
     $appPool = New-Item $idsAppPoolName 
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value ""
     Set-ItemProperty IIS:\AppPools\$idsAppPoolName -name processModel.identityType -value 1
@@ -32,14 +51,14 @@ if (!(Test-Path $idsAppPoolName  -pathType container))
 
 if (!(Test-Path $aspNetAppPoolName -pathType container))
 {
-    #create the app pool
+    Write-Host "Creating app pool $aspNetAppPoolName"
     $appPool = New-Item $aspNetAppPoolName
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value "v4.0"
 }
 
 if (!(Test-Path $aspNetCoreAppPoolName -pathType container))
 {
-    #create the app pool
+    Write-Host "Creating app pool $aspNetCoreAppPoolName"
     $appPool = New-Item $aspNetCoreAppPoolName
     $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value ""
 }
@@ -51,6 +70,7 @@ cd IIS:\Sites
 
 if ( -not (Test-Path $webSite -PathType Container ) )
 {
+	Write-Host "Creating website $webSite"
     New-Item $webSite -bindings @{protocol="https";bindingInformation=":443:" } -physicalPath $directoryPath
 }
 Pop-Location
@@ -60,6 +80,7 @@ cd IIS:\Sites\$webSite
 
 if (-not (Test-Path $idsAppName -pathType container))
 {
+	Write-Host "Creating web application $idsAppName"
 	$dir = Join-Path $directoryPath $idsAppName
 	New-Item -Path $dir -ItemType Directory
 	New-WebApplication -Name $idsAppName -ApplicationPool $idsAppPoolName -physicalPath $dir -Site $webSite
@@ -71,6 +92,8 @@ else
 
 if (-not (Test-Path $aspNetAppName -pathType container))
 {
+	Write-Host "Creating web application $aspNetAppName"
+
 	$dir = Join-Path $directoryPath $aspNetAppName
 	New-Item -Path $dir -ItemType Directory
 	New-WebApplication -Name $aspNetAppName -ApplicationPool $aspNetAppPoolName -physicalPath $dir -Site $webSite
@@ -82,6 +105,8 @@ else
 
 if (-not (Test-Path $aspNetCoreAppName -pathType container))
 {
+	Write-Host "Creating web application $aspNetCoreAppName"
+
 	$dir = Join-Path $directoryPath $aspNetCoreAppName
 	New-Item -Path $dir -ItemType Directory
 	New-WebApplication -Name $aspNetCoreAppName -ApplicationPool $aspNetCoreAppPoolName -physicalPath $dir -Site $webSite
@@ -96,12 +121,15 @@ $msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSB
 $solutionDir = $PSScriptRoot
 
 $project = join-path $solutionDir "AspNetCoreWebSite\AspNetCoreWebSite.csproj"
+Write-Host "Deploying $project"
 & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
 $project = join-path $solutionDir "AspNetWebSite\AspNetWebSite.csproj"
+Write-Host "Deploying $project"
 & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
 $project = join-path $solutionDir "IdentityServer\IdentityServer.csproj"
+Write-Host "Deploying $project"
 & $msbuild "$project" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
 # create the certificates
@@ -116,6 +144,7 @@ $cert = $SourceStore.Certificates | Where-Object { $_.FriendlyName -like $friend
 
 if ( -not $cert)
 {
+	Write-Host "Creating certificate with friendlyname '$friendlyName' in \LocalMachine\My"
     $cert = new-selfsignedcertificate -DnsName localhost -CertStoreLocation Cert:\LocalMachine\My -FriendlyName "$friendlyName"
 }
 
@@ -127,12 +156,14 @@ $DestStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadW
 $destCert = $DestStore.Certificates | Where-Object { $_.FriendlyName -like $friendlyName }
 if ( -not $destCert )
 {
+	Write-Host "Copying certificate to in \LocalMachine\root"
     $DestStore.Add($cert)
 }
 
 $SourceStore.Close()
 $DestStore.Close()
 
+Write-Host "Add Certificate to https binding"
 cd IIS:\SslBindings
 $binding = Get-WebBinding $webSite
 $binding.AddSslCertificate( $cert.GetCertHashString(), "my")

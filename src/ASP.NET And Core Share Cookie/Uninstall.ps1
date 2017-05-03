@@ -1,4 +1,20 @@
 #Requires -RunAsAdministrator
+
+<#
+.SYNOPSIS
+    removes all footprints the dotnet cologne sample app in local IIS
+.DESCRIPTION
+	removes web applications in website DNC2017: (DNCIds, DNCAspNet, DNCAspNetCore)
+    removes applications pools : ( DNCIdentityServerAppPool, DNCAspNetWebSiteAppPool, DNCAspNetCoreWebSiteAppPool )
+	removes a web site: DNC2017 
+	removes the certificate with friendly name : "DNC2017 localhost testcertificate" from "/localmachine/my" and "localmachine/root"
+	deletes folder "C:\inetpub\dnc2017"
+    
+.NOTES
+    requires IIS installed
+    Author         : Ralf Karle
+#>
+
 Import-Module WebAdministration
 
 $idsAppPoolName = "DNCIdentityServerAppPool"
@@ -28,7 +44,7 @@ foreach ($appPool in $appPools )
 	if (Test-Path IIS:\AppPools\$appPool  -pathType container)
 	{
 		Write-Host "Removing application pool $appPool"
-        Stop-WebAppPool $idsAppPoolName -ErrorAction SilentlyContinue
+        Stop-WebAppPool $appPool -ErrorAction SilentlyContinue
 		Remove-WebAppPool -Name $appPool
 	}
 }
@@ -55,6 +71,7 @@ Set-Location -Path "cert:\LocalMachine\My"
 $cert = Get-ChildItem | Where-Object { $_.FriendlyName -eq $friendlyName }
 if ( $cert )
 {
+	Write-Host "Removing certificate from LocalMachine\My"
     $cert.PSPath | remove-item 
 }
 
@@ -62,5 +79,6 @@ Set-Location -Path "cert:\LocalMachine\Root"
 $cert = Get-ChildItem | Where-Object { $_.FriendlyName -eq $friendlyName }
 if ( $cert )
 {
+	Write-Host "Removing certificate from LocalMachine\Root"
     $cert.PSPath | remove-item 
 }
